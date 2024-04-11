@@ -5,9 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DeleteMongoDBSetting } from '@/hooks/mutations';
 import { GetMongoDBSettings } from '@/hooks/queries';
 import { useQueryClient } from '@tanstack/react-query';
-import { Trash } from 'lucide-react';
+import { Edit, Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function MongoDBSettingsPage() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { data } = GetMongoDBSettings({});
 
@@ -30,6 +32,9 @@ export default function MongoDBSettingsPage() {
           <TableRow key={setting.id}>
             <TableCell className="text-right">{setting.collectionName}</TableCell>
             <TableCell className="text-right">
+              <Button onClick={() => router.push(`/settings/mongodb/${setting.id}`)} variant="ghost" size="icon">
+                <Edit size={20} />
+              </Button>
               <Button
                 onClick={() =>
                   mutate({

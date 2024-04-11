@@ -35,7 +35,7 @@ const authMiddleware: Middleware = {
         ? await res.clone().json()
         : await res.clone().text();
 
-      toast.error(`${res.status}`);
+      toast.error(`${res.status} - ${res.statusText}`);
 
       throw new Error(body);
     }

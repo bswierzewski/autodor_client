@@ -5,9 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DeletePolcarSetting } from '@/hooks/mutations';
 import { GetPolcarSettings } from '@/hooks/queries';
 import { useQueryClient } from '@tanstack/react-query';
-import { Trash } from 'lucide-react';
+import { Edit, Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function PolcarSettingsPage() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { data } = GetPolcarSettings({});
 
@@ -38,6 +40,9 @@ export default function PolcarSettingsPage() {
             <TableCell className="text-right">{setting.login}</TableCell>
             <TableCell className="text-right">{setting.password}</TableCell>
             <TableCell className="text-right">
+              <Button onClick={() => router.push(`/settings/polcar/${setting.id}`)} variant="ghost" size="icon">
+                <Edit size={20} />
+              </Button>
               <Button
                 onClick={() =>
                   mutate({
