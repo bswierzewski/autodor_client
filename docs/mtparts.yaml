@@ -641,7 +641,6 @@ components:
       additionalProperties: false
     UpdateUserSettingCommand:
       required:
-        - auth0Id
         - iFirmaSettingId
         - id
         - mongoDBSettingId
@@ -651,9 +650,6 @@ components:
         id:
           type: integer
           format: int32
-        auth0Id:
-          minLength: 1
-          type: string
         iFirmaSettingId:
           type: integer
           format: int32
@@ -668,6 +664,18 @@ components:
       type: object
       properties:
         id:
+          type: integer
+          format: int32
+        auth0Id:
+          type: string
+          nullable: true
+        iFirmaSettingId:
+          type: integer
+          format: int32
+        mongoDBSettingId:
+          type: integer
+          format: int32
+        polcarSettingId:
           type: integer
           format: int32
         email:

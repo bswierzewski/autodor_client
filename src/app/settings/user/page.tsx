@@ -5,9 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DeleteUserSetting } from '@/hooks/mutations';
 import { GetUserSettings } from '@/hooks/queries';
 import { useQueryClient } from '@tanstack/react-query';
-import { Trash } from 'lucide-react';
+import { Edit, Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function UserSettingsPage() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { data } = GetUserSettings({});
 
@@ -42,6 +44,9 @@ export default function UserSettingsPage() {
             <TableCell className="text-right">{setting.fakturaEmail}</TableCell>
             <TableCell className="text-right">{setting.languageId}</TableCell>
             <TableCell className="text-right">
+              <Button onClick={() => router.push(`/settings/user/${setting.id}`)} variant="ghost" size="icon">
+                <Edit size={20} />
+              </Button>
               <Button
                 onClick={() =>
                   mutate({

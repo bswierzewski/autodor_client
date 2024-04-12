@@ -157,7 +157,6 @@ export interface components {
     UpdateUserSettingCommand: {
       /** Format: int32 */
       id: number;
-      auth0Id: string;
       /** Format: int32 */
       iFirmaSettingId: number;
       /** Format: int32 */
@@ -168,6 +167,13 @@ export interface components {
     UserSettingDto: {
       /** Format: int32 */
       id?: number;
+      auth0Id?: string | null;
+      /** Format: int32 */
+      iFirmaSettingId?: number;
+      /** Format: int32 */
+      mongoDBSettingId?: number;
+      /** Format: int32 */
+      polcarSettingId?: number;
       email?: string | null;
       fakturaEmail?: string | null;
       distributorCode?: string | null;
