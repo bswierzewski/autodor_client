@@ -672,31 +672,19 @@ components:
         iFirmaSettingId:
           type: integer
           format: int32
+        iFirmaEmail:
+          type: string
+          nullable: true
         mongoDBSettingId:
           type: integer
           format: int32
+        mongoDBCollection:
+          type: string
+          nullable: true
         polcarSettingId:
           type: integer
           format: int32
-        email:
-          type: string
-          nullable: true
-        fakturaEmail:
-          type: string
-          nullable: true
-        distributorCode:
-          type: string
-          nullable: true
-        branchId:
-          type: integer
-          format: int32
-        languageId:
-          type: integer
-          format: int32
-        databaseName:
-          type: string
-          nullable: true
-        collectionName:
+        polcarDistributorCode:
           type: string
           nullable: true
       additionalProperties: false

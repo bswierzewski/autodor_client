@@ -8,11 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Cloud, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import React from 'react';
 import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
-import { links } from '@/config/site';
+import { Urls } from '@/config/site';
 import { useRouter } from 'next/navigation';
 
 export default function Avatar() {
@@ -32,9 +32,10 @@ export default function Avatar() {
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>{session.data?.user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {links.map((link) => (
-          <DropdownMenuItem key={link.href} onClick={() => router.push(link.href)}>
-            <span>{link.name}</span>
+        {Urls.map((url) => (
+          <DropdownMenuItem key={url.id} onClick={() => router.push(url.route)}>
+            {url.iconSmall}
+            <span className="mx-2">{url.label}</span>
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />

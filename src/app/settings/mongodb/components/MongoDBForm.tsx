@@ -30,8 +30,8 @@ export default function MongoDBForm({ mode, onSubmit, defaultValues, isPending }
     <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
       <div className="grid w-full items-center gap-4">
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="collectionName">Nazwa kolekcji</Label>
-          <Input id="collectionName" placeholder="Nazwa kolekcji" {...register('collectionName')} />
+          <Label htmlFor="collectionName">Collection</Label>
+          <Input id="collectionName" placeholder="Collection name" {...register('collectionName')} />
         </div>
       </div>
       <FormButtons isPending={isPending} mode={mode} />

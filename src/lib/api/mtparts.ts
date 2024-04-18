@@ -170,19 +170,13 @@ export interface components {
       auth0Id?: string | null;
       /** Format: int32 */
       iFirmaSettingId?: number;
+      iFirmaEmail?: string | null;
       /** Format: int32 */
       mongoDBSettingId?: number;
+      mongoDBCollection?: string | null;
       /** Format: int32 */
       polcarSettingId?: number;
-      email?: string | null;
-      fakturaEmail?: string | null;
-      distributorCode?: string | null;
-      /** Format: int32 */
-      branchId?: number;
-      /** Format: int32 */
-      languageId?: number;
-      databaseName?: string | null;
-      collectionName?: string | null;
+      polcarDistributorCode?: string | null;
     };
   };
   responses: never;

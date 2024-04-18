@@ -5,7 +5,7 @@ import { LogIn } from 'lucide-react';
 
 export default function LoginButton() {
   return (
-    <Button variant="outline" onClick={() => signIn('auth0')}>
+    <Button className="w-full" variant="outline" onClick={() => signIn('auth0')}>
       <LogIn className="mr-2" />
       Login
     </Button>

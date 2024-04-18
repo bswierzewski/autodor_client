@@ -23,26 +23,20 @@ export default function UserSettingsPage() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-right">branchId</TableHead>
-          <TableHead className="text-right">collectionName</TableHead>
-          <TableHead className="text-right">databaseName</TableHead>
-          <TableHead className="text-right">distributorCode</TableHead>
-          <TableHead className="text-right">email</TableHead>
-          <TableHead className="text-right">fakturaEmail</TableHead>
-          <TableHead className="text-right">languageId</TableHead>
+          <TableHead className="text-right">Auth0</TableHead>
+          <TableHead className="text-right">Polcar</TableHead>
+          <TableHead className="text-right">MongoDB</TableHead>
+          <TableHead className="text-right">iFirma</TableHead>
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data?.map((setting) => (
           <TableRow key={setting.id}>
-            <TableCell className="text-right">{setting.branchId}</TableCell>
-            <TableCell className="text-right">{setting.collectionName}</TableCell>
-            <TableCell className="text-right">{setting.databaseName}</TableCell>
-            <TableCell className="text-right">{setting.distributorCode}</TableCell>
-            <TableCell className="text-right">{setting.email}</TableCell>
-            <TableCell className="text-right">{setting.fakturaEmail}</TableCell>
-            <TableCell className="text-right">{setting.languageId}</TableCell>
+            <TableCell className="text-right">{setting.auth0Id}</TableCell>
+            <TableCell className="text-right">{setting.polcarDistributorCode}</TableCell>
+            <TableCell className="text-right">{setting.mongoDBCollection}</TableCell>
+            <TableCell className="text-right">{setting.iFirmaEmail}</TableCell>
             <TableCell className="text-right">
               <Button onClick={() => router.push(`/settings/user/${setting.id}`)} variant="ghost" size="icon">
                 <Edit size={20} />

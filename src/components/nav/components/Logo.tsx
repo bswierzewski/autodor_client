@@ -5,7 +5,12 @@ import Image from 'next/image';
 import React from 'react';
 import { useTheme } from 'next-themes';
 
-export default function Logo() {
+type Props = {
+  size: number;
+  className?: string;
+};
+
+export default function Logo({ className, size }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { theme } = useTheme();
@@ -15,11 +20,14 @@ export default function Logo() {
   }
 
   return (
-    <div onClick={doReset} className="cursor-pointer flex items-center gap-2 text-3xl font-semibold">
+    <div
+      onClick={doReset}
+      className={`${className} cursor-pointer flex items-center gap-2 text-3xl font-semibold mx-5`}
+    >
       {theme == 'dark' ? (
-        <Image src="/logo-dark.svg" height={120} width={120} alt={'logo'} />
+        <Image src="/logo-dark.svg" height={size} width={size} alt={'logo'} />
       ) : (
-        <Image src="/logo-light.svg" height={120} width={120} alt={'logo'} />
+        <Image src="/logo-light.svg" height={size} width={size} alt={'logo'} />
       )}
     </div>
   );
