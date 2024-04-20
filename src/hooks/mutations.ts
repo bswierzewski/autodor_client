@@ -18,6 +18,8 @@ const DELETE_POLCAR_SETTING = '/api/settings/polcarSettings/{id}';
 const CREATE_USER_SETTING = '/api/settings/userSettings';
 const UPDATE_USER_SETTING = '/api/settings/userSettings/{id}';
 const DELETE_USER_SETTING = '/api/settings/userSettings/{id}';
+const CREATE_CONTRACTOR = '/api/Contractors';
+const DELETE_CONTRACTOR = '/api/Contractors/{id}';
 
 export {
   CREATE_IFIRMA_SETTING,
@@ -187,6 +189,33 @@ export function DeleteUserSetting(
   return useMutation({
     mutationFn: async ({ body, params }) => {
       const { data } = await client.DELETE(DELETE_USER_SETTING, { params });
+
+      return data;
+    },
+    ...options
+  });
+}
+
+// Contractors
+export function CreateContractor(
+  options?: MutationOptions<number | undefined, paths[typeof CREATE_CONTRACTOR]['post']>
+) {
+  return useMutation({
+    mutationFn: async ({ body, params }) => {
+      const { data } = await client.POST(CREATE_CONTRACTOR, { body });
+
+      return data;
+    },
+    ...options
+  });
+}
+
+export function DeleteContractor(
+  options?: MutationOptions<number | undefined, paths[typeof DELETE_CONTRACTOR]['delete']>
+) {
+  return useMutation({
+    mutationFn: async ({ body, params }) => {
+      const { data } = await client.DELETE(DELETE_CONTRACTOR, { params });
 
       return data;
     },

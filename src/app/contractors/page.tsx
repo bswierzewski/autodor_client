@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { GetContractors } from '@/hooks/queries';
-import { RefreshCcw } from 'lucide-react';
+import { Plus, RefreshCcw } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function Contractors() {
+  const router = useRouter();
   const { data, refetch } = GetContractors({
     reactQuery: {
       enabled: false
@@ -18,9 +20,13 @@ export default function Contractors() {
     <div>
       <div className="flex flex-col sm:flex-row gap-5">
         <Input placeholder="Search by name" />
-        <Button size="default" onClick={() => refetch()}>
+        <Button size="default" onClick={() => refetch()} variant='secondary'>
           <RefreshCcw />
           <span className="ml-3 inline sm:hidden">Refresh</span>
+        </Button>
+        <Button size="default" onClick={() => router.push('/contractors/add')}>
+          <Plus />
+          <span className="ml-3 inline sm:hidden">Add</span>
         </Button>
       </div>
       <Separator className="my-4" />

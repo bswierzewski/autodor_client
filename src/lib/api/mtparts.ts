@@ -7,6 +7,10 @@
 export interface paths {
   "/api/Contractors": {
     get: operations["GetContractors"];
+    post: operations["CreateContractor"];
+  };
+  "/api/Contractors/{id}": {
+    delete: operations["DeleteContractor"];
   };
   "/api/Orders": {
     get: operations["GetOrders"];
@@ -62,6 +66,14 @@ export interface components {
       street?: string | null;
       nip?: string | null;
       zipCode?: string | null;
+      email?: string | null;
+    };
+    CreateContractorCommand: {
+      name?: string | null;
+      city?: string | null;
+      nip?: string | null;
+      zipCode?: string | null;
+      street?: string | null;
       email?: string | null;
     };
     CreateIFirmaSettingCommand: {
@@ -199,6 +211,32 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Contractor"][];
         };
+      };
+    };
+  };
+  CreateContractor: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateContractorCommand"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
+  };
+  DeleteContractor: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
       };
     };
   };
