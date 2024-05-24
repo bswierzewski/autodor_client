@@ -1,16 +1,20 @@
 'use client';
 
-import React from 'react';
-import { Button } from '../ui/button';
-import { useRouter } from 'next/navigation';
-import { Urls } from '@/config/site';
-import Logo from './components/Logo';
-import { Separator } from '../ui/separator';
-import { ThemePicker } from './components/ThemePicker';
-import { useSession } from 'next-auth/react';
 import { LogOut } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
+import { env } from 'next-runtime-env';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+
+import { Urls } from '@/config/site';
+
+import Logo from './components/Logo';
+import { ThemePicker } from './components/ThemePicker';
+
+import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
 
 type Props = {
   className?: string;
@@ -55,7 +59,16 @@ export default function Sidebar({ className }: Props) {
           <Separator />
           <div className="flex justify-around">
             <ThemePicker />
-            <Button onClick={() => signOut()} size="icon" variant="ghost">
+            <Button
+              onClick={() =>
+                signOut({
+                  callbackUrl: `https://${env('NEXT_PUBLIC_AUTH0_DOMAIN')}/v2/logout?client_id=${env('NEXT_PUBLIC_AUTH0_CLIENTID')}&returnTo=${env('NEXT_PUBLIC_NEXTAUTH_URL')}`,
+                  redirect: true
+                })
+              }
+              size="icon"
+              variant="ghost"
+            >
               <LogOut />
             </Button>
           </div>

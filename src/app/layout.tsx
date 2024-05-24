@@ -1,10 +1,14 @@
-import '../styles/globals.css';
-import type { Metadata } from 'next';
-import { Providers } from './providers';
-import { siteConfig } from '@/config/site';
-import Navbar from '@/components/nav/Navbar';
 import Guard from './Guard';
+import { Providers } from './providers';
+import type { Metadata } from 'next';
+import { PublicEnvScript } from 'next-runtime-env';
+
+import { siteConfig } from '@/config/site';
+
+import Navbar from '@/components/nav/Navbar';
 import Sidebar from '@/components/nav/Sidebar';
+
+import '../styles/globals.css';
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -18,6 +22,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
+      <head>
+        <PublicEnvScript />
+      </head>
       <body className="min-h-screen">
         <Providers>
           <Guard>

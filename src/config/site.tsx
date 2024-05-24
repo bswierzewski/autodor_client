@@ -23,6 +23,5 @@ export const Urls = [
     icon: <UserSearch />,
     iconSmall: <UserSearch className="h-4 w-4" />,
     route: '/contractors'
-  },
-  { id: 3, label: 'Settings', icon: <Settings />, iconSmall: <Settings className="h-4 w-4" />, route: '/settings' }
+  }
 ];

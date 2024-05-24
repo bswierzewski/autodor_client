@@ -37,6 +37,15 @@ const authOptions: NextAuthOptions = {
       }
 
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Allows callback URLs to auth0
+      else if (new URL(url).hostname === process.env.AUTH0_DOMAIN) return url;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     }
   }
 };

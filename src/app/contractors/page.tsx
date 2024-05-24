@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { GetContractors } from '@/hooks/queries';
+import { useGetContractors } from '@/lib/api/mtparts';
 import { RefreshCcw } from 'lucide-react';
 
 export default function Contractors() {
-  const { data, refetch } = GetContractors({
-    reactQuery: {
+  const { data, refetch } = useGetContractors({
+    query: {
       enabled: false
     }
   });

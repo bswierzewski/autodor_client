@@ -1,24 +1,31 @@
 'use client';
 
+import { RefreshCcw } from 'lucide-react';
+import { useState } from 'react';
+
+import { useGetOrders } from '@/lib/api/mtparts';
+
+import { DatePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { GetOrders } from '@/hooks/queries';
-import { DatePicker } from '@/components/DatePicker';
-import { useState } from 'react';
-import { RefreshCcw } from 'lucide-react';
 
 export default function Dashboard() {
   var daysInSecond = 7 * 24 * 60 * 60 * 1000;
   const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date(Date.now() - daysInSecond));
   const [dateTo, setDateTo] = useState<Date | undefined>(new Date());
 
-  const { data, refetch } = GetOrders({
-    params: { query: { dateFrom: dateFrom?.toDateString() ?? '', dateTo: dateTo?.toDateString() ?? '' } },
-    reactQuery: {
-      enabled: false
+  const { data, refetch } = useGetOrders(
+    {
+      dateFrom: dateFrom?.toDateString() ?? '',
+      dateTo: dateTo?.toDateString() ?? ''
+    },
+    {
+      query: {
+        enabled: false
+      }
     }
-  });
+  );
 
   return (
     <div>

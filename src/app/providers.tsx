@@ -1,9 +1,9 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
-import { ThemeProvider } from 'next-themes';
-import { SessionProvider } from 'next-auth/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from 'next-themes';
+import { ReactNode, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 export interface ProvidersProps {
@@ -17,7 +17,7 @@ export function Providers({ children }: ProvidersProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            retry: 0
+            retry: false
           }
         }
       })
