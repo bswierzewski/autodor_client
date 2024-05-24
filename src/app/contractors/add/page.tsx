@@ -36,7 +36,21 @@ export default function AddContractor() {
   });
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))} className="mt-5">
+    <form
+      onSubmit={handleSubmit((data) =>
+        mutate({
+          data: {
+            city: data.city,
+            email: data.email,
+            name: data.name,
+            nip: data.nip,
+            street: data.street,
+            zipCode: data.zipCode
+          }
+        })
+      )}
+      className="mt-5"
+    >
       <div className="grid w-full items-center gap-4">
         <div className="flex flex-col space-y-2">
           <Label htmlFor="name">Name</Label>

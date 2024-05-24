@@ -1,9 +1,10 @@
 'use client';
 
-import { Plus, RefreshCcw } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Plus, RefreshCcw, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { useGetContractors } from '@/lib/api/mtparts';
+import { getGetContractorsQueryKey, useDeleteContractor, useGetContractors } from '@/lib/api/mtparts';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,9 +13,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 export default function Contractors() {
   const router = useRouter();
-  const { data, refetch } = useGetContractors({
-    query: {
-      enabled: false
+  const queryClient = useQueryClient();
+  const { data, refetch } = useGetContractors();
+  const { mutate } = useDeleteContractor({
+    mutation: {
+      onSuccess() {
+        queryClient.invalidateQueries({
+          queryKey: getGetContractorsQueryKey()
+        });
+      }
     }
   });
 
@@ -37,11 +44,11 @@ export default function Contractors() {
           <TableRow>
             <TableHead className="text-right">Name</TableHead>
             <TableHead className="text-right">City</TableHead>
-            <TableHead className="text-right">CraetedAt</TableHead>
-            <TableHead className="text-right">Email</TableHead>
-            <TableHead className="text-right">Nip</TableHead>
-            <TableHead className="text-right">Street</TableHead>
             <TableHead className="text-right">ZipCode</TableHead>
+            <TableHead className="text-right">Street</TableHead>
+            <TableHead className="text-right">Nip</TableHead>
+            <TableHead className="text-right">Email</TableHead>
+            <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -49,11 +56,27 @@ export default function Contractors() {
             <TableRow key={contractor.id}>
               <TableCell className="text-right">{contractor.name}</TableCell>
               <TableCell className="text-right">{contractor.city}</TableCell>
-              <TableCell className="text-right">{contractor.createdAt}</TableCell>
-              <TableCell className="text-right">{contractor.email}</TableCell>
-              <TableCell className="text-right">{contractor.nip}</TableCell>
-              <TableCell className="text-right">{contractor.street}</TableCell>
               <TableCell className="text-right">{contractor.zipCode}</TableCell>
+              <TableCell className="text-right">{contractor.street}</TableCell>
+              <TableCell className="text-right">{contractor.nip}</TableCell>
+              <TableCell className="text-right">{contractor.email}</TableCell>
+              <TableCell className="text-right">
+                {
+                  <Button
+                    onClick={() =>
+                      mutate({
+                        data: {
+                          id: contractor.id ?? ''
+                        }
+                      })
+                    }
+                    size="icon"
+                    variant="destructive"
+                  >
+                    <Trash />
+                  </Button>
+                }
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
