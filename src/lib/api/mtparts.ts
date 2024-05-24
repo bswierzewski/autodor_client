@@ -47,6 +47,11 @@ export interface OrderDto {
   readonly totalPrice?: number;
 }
 
+export interface DeleteContractorCommand {
+  /** @minLength 1 */
+  id: string;
+}
+
 export interface CreateContractorCommand {
   /** @nullable */
   city?: string | null;
@@ -195,12 +200,14 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
     }
     
 export const deleteContractor = (
-    id?: string,
+    deleteContractorCommand: DeleteContractorCommand,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<void>(
-      {url: `/api/Contractors/${id}`, method: 'DELETE'
+      {url: `/api/Contractors`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
+      data: deleteContractorCommand
     },
       options);
     }
@@ -208,17 +215,17 @@ export const deleteContractor = (
 
 
 export const getDeleteContractorMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{id?: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{id?: string}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{data: DeleteContractorCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{data: DeleteContractorCommand}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteContractor>>, {id?: string}> = (props) => {
-          const {id} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteContractor>>, {data: DeleteContractorCommand}> = (props) => {
+          const {data} = props ?? {};
 
-          return  deleteContractor(id,requestOptions)
+          return  deleteContractor(data,requestOptions)
         }
 
         
@@ -227,15 +234,15 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
   return  { mutationFn, ...mutationOptions }}
 
     export type DeleteContractorMutationResult = NonNullable<Awaited<ReturnType<typeof deleteContractor>>>
-    
+    export type DeleteContractorMutationBody = DeleteContractorCommand
     export type DeleteContractorMutationError = unknown
 
     export const useDeleteContractor = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{id?: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{data: DeleteContractorCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
         Awaited<ReturnType<typeof deleteContractor>>,
         TError,
-        {id?: string},
+        {data: DeleteContractorCommand},
         TContext
       > => {
 
