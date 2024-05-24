@@ -1,0 +1,66 @@
+'use client';
+
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import FormButtons from '@/app/settings/components/FormButtons';
+import { CreateContractor } from '@/hooks/mutations';
+import { useRouter } from 'next/navigation';
+
+
+const schema = z.object({
+    name: z.string().min(1),
+    city: z.string().min(1),
+    street: z.string().min(1),
+    nip: z.string().min(1),
+    zipCode:z.string().min(1),
+    email: z.string().min(1)
+  });
+  
+  export type contractorSchema = z.infer<typeof schema>;
+
+export default function AddContractor() {
+    const router = useRouter();
+    const { mutate, isPending } = CreateContractor({
+        onSuccess() {
+          router.back();
+        }
+      });
+    const { handleSubmit, register } = useForm<contractorSchema>({
+        resolver: zodResolver(schema)
+      });
+
+  return (
+    <form onSubmit={handleSubmit(data => console.log(data))} className="mt-5">
+    <div className="grid w-full items-center gap-4">
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" placeholder="Name" {...register('name')} />
+      </div>
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="city">City</Label>
+        <Input id="city" placeholder="city" {...register('city')} />
+      </div>
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="street">Street</Label>
+        <Input id="street" placeholder="street" {...register('street')} />
+      </div>
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="nip">NIP</Label>
+        <Input id="nip" placeholder="NIP" {...register('nip')} />
+      </div>
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="zipCode">ZipCode</Label>
+        <Input id="zipCode" placeholder="00-000" {...register('zipCode')} />
+      </div>
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" placeholder="email" {...register('email')} />
+      </div>
+    </div>
+    <FormButtons isPending={isPending} mode='create' />
+  </form>
+  )
+}
