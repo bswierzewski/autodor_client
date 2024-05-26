@@ -3,6 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Plus, RefreshCcw, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { getGetContractorsQueryKey, useDeleteContractor, useGetContractors } from '@/lib/api/mtparts';
 
@@ -12,6 +13,8 @@ import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export default function Contractors() {
+  const [searchQuery, setSearchQuery] = useState('');
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data, refetch } = useGetContractors();
@@ -25,10 +28,14 @@ export default function Contractors() {
     }
   });
 
+  const filteredContractors = data?.filter((contractor) =>
+    contractor.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row gap-5">
-        <Input placeholder="Search by name" />
+        <Input placeholder="Search by name" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         <Button size="default" onClick={() => refetch()} variant="secondary">
           <RefreshCcw />
           <span className="ml-3 inline sm:hidden">Refresh</span>
@@ -52,7 +59,7 @@ export default function Contractors() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((contractor) => (
+          {filteredContractors?.map((contractor) => (
             <TableRow key={contractor.id}>
               <TableCell className="text-right">{contractor.name}</TableCell>
               <TableCell className="text-right">{contractor.city}</TableCell>
