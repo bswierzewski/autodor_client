@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { BookPlus, Check, ChevronsUpDown, RefreshCcw } from 'lucide-react';
+import { BookPlus, Check, ChevronsUpDown, RotateCw } from 'lucide-react';
 import moment from 'moment';
 import { useState } from 'react';
 
@@ -76,105 +76,114 @@ export default function Dashboard() {
   const filteredOrders = data?.filter((order) => order.person?.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
-    <div>
-      <Input placeholder="Search by name" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-      <div className="flex flex-col sm:flex-row gap-5">
-        <DatePicker date={dateFrom} setDate={setDateFrom} label="Date from" />
-        <DatePicker date={dateTo} setDate={setDateTo} label="Date to" />
-        <Button className="sm:mt-6" disabled={isGetOrdersFetching} size="default" onClick={() => refetch()}>
-          <RefreshCcw className={cn(isGetOrdersFetching ? 'animate-spin' : '')} />
-          <span className="ml-3 inline sm:hidden">Refresh</span>
-        </Button>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-5 mt-2">
-        <div className="flex-1">
-          <Label>Invoice number</Label>
-          <Input
-            placeholder="Invoice number"
-            value={invoiceNumber}
-            type="number"
-            onChange={(e) => setInvoiceNumber(Number(e.target.value))}
-          />
+    <div className="flex flex-col md:flex-row gap-5">
+      <div className="flex-1">
+        <div className="flex flex-col md:flex-row gap-5">
+          <DatePicker date={dateFrom} setDate={setDateFrom} label="Date from" />
+          <DatePicker date={dateTo} setDate={setDateTo} label="Date to" />
+          <Button className="md:mt-6" disabled={isGetOrdersFetching} size="default" onClick={() => refetch()}>
+            <RotateCw className={cn(isGetOrdersFetching ? 'animate-spin' : '')} />
+            <span className="ml-3 inline md:hidden">Refresh</span>
+          </Button>
         </div>
-        <DatePicker date={issueDate} setDate={setIssueDate} label="Issue date" />
-        <DatePicker date={saleDate} setDate={setSaleDate} label="Sale date" />
-        <div className="flex-1 flex flex-col gap-2">
-          <Label>Contractor</Label>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" role="combobox" aria-expanded={open} className="flex-1 justify-between">
-                {selectedContractor?.id ? selectedContractor.name : 'Select contractor...'}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Command>
-                <CommandInput placeholder="Search contractor..." />
-                <CommandEmpty>No contractor found.</CommandEmpty>
-                <CommandGroup>
-                  <CommandList>
-                    {contractors?.map((contractor) => (
-                      <CommandItem
-                        key={contractor.id}
-                        value={contractor.id ?? ''}
-                        onSelect={() => {
-                          setOpen(false);
-                          setSelectedContractor(contractor);
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            'mr-2 h-4 w-4',
-                            selectedContractor?.id === contractor.id ? 'opacity-100' : 'opacity-0'
-                          )}
-                        />
-                        {contractor.name}
-                      </CommandItem>
-                    ))}
-                  </CommandList>
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
-        <Button className="sm:mt-6" size="default" onClick={handleCreateInvoice}>
-          <BookPlus />
-          <span className="ml-3 inline sm:hidden">Add</span>
-        </Button>
-      </div>
-      <Separator className="my-4" />
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead className="text-right">Id</TableHead>
-            <TableHead className="text-right">Date</TableHead>
-            <TableHead className="text-right">Items count</TableHead>
-            <TableHead className="text-right">Number</TableHead>
-            <TableHead className="text-right">Person</TableHead>
-            <TableHead className="text-right">Total price</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredOrders?.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell>
-                <Checkbox
-                  id={order.id ?? ''}
-                  onCheckedChange={() => handleCheckboxChange(order.id ?? '')}
-                  checked={selectedOrders.has(order.id ?? '')}
-                />
-              </TableCell>
-              <TableCell className="text-right">{order.id}</TableCell>
-              <TableCell className="text-right">{moment(order.date).format('YYYY-MM-DD')}</TableCell>
-              <TableCell className="text-right">{order.itemsCount}</TableCell>
-              <TableCell className="text-right">{order.number}</TableCell>
-              <TableCell className="text-right">{order.person}</TableCell>
-              <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
+        <Separator className="my-2 h-[2px]" />
+        <Input
+          className="mb-2"
+          placeholder="Search by name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead className="text-right">Id</TableHead>
+              <TableHead className="text-right">Date</TableHead>
+              <TableHead className="text-right">Items count</TableHead>
+              <TableHead className="text-right">Number</TableHead>
+              <TableHead className="text-right">Person</TableHead>
+              <TableHead className="text-right">Total price</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredOrders?.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>
+                  <Checkbox
+                    id={order.id ?? ''}
+                    onCheckedChange={() => handleCheckboxChange(order.id ?? '')}
+                    checked={selectedOrders.has(order.id ?? '')}
+                  />
+                </TableCell>
+                <TableCell className="text-right">{order.id}</TableCell>
+                <TableCell className="text-right">{moment(order.date).format('YYYY-MM-DD')}</TableCell>
+                <TableCell className="text-right">{order.itemsCount}</TableCell>
+                <TableCell className="text-right">{order.number}</TableCell>
+                <TableCell className="text-right">{order.person}</TableCell>
+                <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div>
+        <div className="flex flex-col gap-5 mt-2">
+          <div className="flex-1">
+            <Label>Invoice number</Label>
+            <Input
+              placeholder="Invoice number"
+              value={invoiceNumber}
+              type="number"
+              onChange={(e) => setInvoiceNumber(Number(e.target.value))}
+            />
+          </div>
+          <DatePicker date={issueDate} setDate={setIssueDate} label="Issue date" />
+          <DatePicker date={saleDate} setDate={setSaleDate} label="Sale date" />
+          <div className="flex-1 flex flex-col gap-2">
+            <Label>Contractor</Label>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" role="combobox" aria-expanded={open} className="flex-1 justify-between">
+                  {selectedContractor?.id ? selectedContractor.name : 'Select contractor...'}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="p-0">
+                <Command>
+                  <CommandInput placeholder="Search contractor..." />
+                  <CommandEmpty>No contractor found.</CommandEmpty>
+                  <CommandGroup>
+                    <CommandList>
+                      {contractors?.map((contractor) => (
+                        <CommandItem
+                          key={contractor.id}
+                          value={contractor.id ?? ''}
+                          onSelect={() => {
+                            setOpen(false);
+                            setSelectedContractor(contractor);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              'mr-2 h-4 w-4',
+                              selectedContractor?.id === contractor.id ? 'opacity-100' : 'opacity-0'
+                            )}
+                          />
+                          {contractor.name}
+                        </CommandItem>
+                      ))}
+                    </CommandList>
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <Button className="md:mt-6" size="default" onClick={handleCreateInvoice}>
+            <BookPlus />
+            <span className="ml-3">Add Invoice</span>
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
