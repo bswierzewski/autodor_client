@@ -53,6 +53,7 @@ export interface DeleteContractorCommand {
 }
 
 export interface CreateInvoiceCommand {
+  contractor?: Contractor;
   invoiceNumber?: number;
   issueDate?: string;
   /** @minItems 1 */

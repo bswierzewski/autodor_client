@@ -154,6 +154,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrderDto'
+        contractor:
+          $ref: '#/components/schemas/Contractor'
       additionalProperties: false
     DeleteContractorCommand:
       required:
