@@ -4,10 +4,12 @@ import { cn } from '@/lib/utils';
 import { BookPlus, Check, ChevronsUpDown, RotateCw } from 'lucide-react';
 import moment from 'moment';
 import { useState } from 'react';
+import { z } from 'zod';
 
 import { Contractor, useCreateInvoice, useGetContractors, useGetOrders } from '@/lib/api/mtparts';
 
 import { DatePicker } from '@/components/DatePicker';
+import Errors from '@/components/Errors';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -16,6 +18,23 @@ import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
+const invoiceSchema = z.object({
+  orders: z.array(
+    z.object({
+      id: z.string()
+    })
+  ),
+  contractor: z.object({
+    id: z.string()
+  }),
+  invoiceNumber: z.number().positive(),
+  issueDate: z.string(),
+  saleDate: z.string()
+});
+
+type InvoiceData = z.infer<typeof invoiceSchema>;
+type InvoiceErrors = z.ZodFormattedError<InvoiceData>;
 
 export default function Dashboard() {
   var daysInSecond = 7 * 24 * 60 * 60 * 1000;
@@ -29,6 +48,7 @@ export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [selectedContractor, setSelectedContractor] = useState<Contractor>();
   const [invoiceNumber, setInvoiceNumber] = useState<number>(0);
+  const [errors, setErrors] = useState<InvoiceErrors>();
 
   const {
     data,
@@ -62,14 +82,26 @@ export default function Dashboard() {
 
   const handleCreateInvoice = () => {
     const selectedOrderDetails = filteredOrders?.filter((order) => selectedOrders.has(order.id ?? '')) ?? [];
+
+    const invoiceData = {
+      orders: selectedOrderDetails,
+      contractor: selectedContractor,
+      invoiceNumber: invoiceNumber,
+      issueDate: moment(issueDate).format(),
+      saleDate: moment(saleDate).format()
+    };
+
+    const result = invoiceSchema.safeParse(invoiceData);
+
+    if (!result.success) {
+      setErrors(result.error.format());
+      return;
+    }
+
+    setErrors(undefined);
+
     mutate({
-      data: {
-        orders: selectedOrderDetails,
-        contractor: selectedContractor,
-        invoiceNumber: invoiceNumber,
-        issueDate: moment(issueDate).format(),
-        saleDate: moment(saleDate).format()
-      }
+      data: invoiceData
     });
   };
 
@@ -136,9 +168,16 @@ export default function Dashboard() {
               type="number"
               onChange={(e) => setInvoiceNumber(Number(e.target.value))}
             />
+            <Errors errors={errors?.invoiceNumber?._errors} />
           </div>
-          <DatePicker date={issueDate} setDate={setIssueDate} label="Issue date" />
-          <DatePicker date={saleDate} setDate={setSaleDate} label="Sale date" />
+          <div>
+            <DatePicker date={issueDate} setDate={setIssueDate} label="Issue date" />
+            <Errors errors={errors?.issueDate?._errors} />
+          </div>
+          <div>
+            <DatePicker date={saleDate} setDate={setSaleDate} label="Sale date" />
+            <Errors errors={errors?.saleDate?._errors} />
+          </div>
           <div className="flex-1 flex flex-col gap-2">
             <Label>Contractor</Label>
             <Popover open={open} onOpenChange={setOpen}>
@@ -177,6 +216,7 @@ export default function Dashboard() {
                 </Command>
               </PopoverContent>
             </Popover>
+            <Errors errors={errors?.contractor?._errors} />
           </div>
           <Button className="md:mt-6" size="default" onClick={handleCreateInvoice}>
             <BookPlus />
