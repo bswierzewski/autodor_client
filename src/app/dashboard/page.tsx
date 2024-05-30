@@ -1,90 +1,63 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { BookPlus, Check, ChevronsUpDown, RotateCw } from 'lucide-react';
+import { useContractorsStore } from '@/stores/contractor';
+import { useOrdersStore } from '@/stores/orders';
+import { BookPlus } from 'lucide-react';
 import moment from 'moment';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
 
-import { Contractor, useCreateInvoice, useGetContractors, useGetOrders } from '@/lib/api/mtparts';
+import { useCreateInvoice } from '@/lib/api/mtparts';
 
+import ContractorPopover from './components/ContractorPopover';
+import OrdersTable from './components/OrdersTable';
 import { DatePicker } from '@/components/DatePicker';
 import Errors from '@/components/Errors';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const invoiceSchema = z.object({
-  orders: z.array(
-    z.object({
-      id: z.string()
-    })
-  ),
+  orders: z
+    .array(
+      z.object({
+        id: z.string()
+      })
+    )
+    .min(1),
   contractor: z.object({
     id: z.string()
   }),
   invoiceNumber: z.number().positive(),
-  issueDate: z.string(),
-  saleDate: z.string()
+  issueDate: z.string().min(1),
+  saleDate: z.string().min(1)
 });
 
 type InvoiceData = z.infer<typeof invoiceSchema>;
 type InvoiceErrors = z.ZodFormattedError<InvoiceData>;
 
 export default function Dashboard() {
-  var daysInSecond = 7 * 24 * 60 * 60 * 1000;
-
-  const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date(Date.now() - daysInSecond));
-  const [dateTo, setDateTo] = useState<Date | undefined>(new Date());
-  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
   const [issueDate, setIssueDate] = useState<Date | undefined>(new Date());
   const [saleDate, setSaleDate] = useState<Date | undefined>(new Date());
-  const [searchQuery, setSearchQuery] = useState('');
-  const [open, setOpen] = useState(false);
-  const [selectedContractor, setSelectedContractor] = useState<Contractor>();
   const [invoiceNumber, setInvoiceNumber] = useState<number>(0);
   const [errors, setErrors] = useState<InvoiceErrors>();
 
-  const {
-    data,
-    refetch,
-    isFetching: isGetOrdersFetching
-  } = useGetOrders(
-    {
-      dateFrom: dateFrom?.toDateString() ?? '',
-      dateTo: dateTo?.toDateString() ?? ''
-    },
-    {
-      query: {
-        enabled: false
+  const orders = useOrdersStore((state) => state.orders);
+  const selectedContractor = useContractorsStore((state) => state.selectedContractor);
+
+  const { mutate } = useCreateInvoice({
+    mutation: {
+      onSuccess(data, variables, context) {
+        if (data.response?.kod === 0) toast.success(data.response?.informacja ?? 'Empty response');
+        else toast.error(`${data.response?.kod} - ${data.response?.informacja}`);
       }
     }
-  );
-  const { data: contractors } = useGetContractors();
-  const { mutate } = useCreateInvoice();
-
-  const handleCheckboxChange = (orderId: string) => {
-    setSelectedOrders((prevSelectedOrders) => {
-      const updatedSelectedOrders = new Set(prevSelectedOrders);
-      if (updatedSelectedOrders.has(orderId)) {
-        updatedSelectedOrders.delete(orderId);
-      } else {
-        updatedSelectedOrders.add(orderId);
-      }
-      return updatedSelectedOrders;
-    });
-  };
+  });
 
   const handleCreateInvoice = () => {
-    const selectedOrderDetails = filteredOrders?.filter((order) => selectedOrders.has(order.id ?? '')) ?? [];
-
     const invoiceData = {
-      orders: selectedOrderDetails,
+      orders: orders.filter((order) => order.isSelected && order.isVisible),
       contractor: selectedContractor,
       invoiceNumber: invoiceNumber,
       issueDate: moment(issueDate).format(),
@@ -105,58 +78,11 @@ export default function Dashboard() {
     });
   };
 
-  const filteredOrders = data?.filter((order) => order.person?.toLowerCase().includes(searchQuery.toLowerCase()));
-
   return (
     <div className="flex flex-col md:flex-row gap-5">
       <div className="flex-1">
-        <div className="flex flex-col md:flex-row gap-5">
-          <DatePicker date={dateFrom} setDate={setDateFrom} label="Date from" />
-          <DatePicker date={dateTo} setDate={setDateTo} label="Date to" />
-          <Button className="md:mt-6" disabled={isGetOrdersFetching} size="default" onClick={() => refetch()}>
-            <RotateCw className={cn(isGetOrdersFetching ? 'animate-spin' : '')} />
-            <span className="ml-3 inline md:hidden">Refresh</span>
-          </Button>
-        </div>
-        <Separator className="my-2 h-[2px]" />
-        <Input
-          className="mb-2"
-          placeholder="Search by name"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead></TableHead>
-              <TableHead className="text-right">Id</TableHead>
-              <TableHead className="text-right">Date</TableHead>
-              <TableHead className="text-right">Items count</TableHead>
-              <TableHead className="text-right">Number</TableHead>
-              <TableHead className="text-right">Person</TableHead>
-              <TableHead className="text-right">Total price</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredOrders?.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell>
-                  <Checkbox
-                    id={order.id ?? ''}
-                    onCheckedChange={() => handleCheckboxChange(order.id ?? '')}
-                    checked={selectedOrders.has(order.id ?? '')}
-                  />
-                </TableCell>
-                <TableCell className="text-right">{order.id}</TableCell>
-                <TableCell className="text-right">{moment(order.date).format('YYYY-MM-DD')}</TableCell>
-                <TableCell className="text-right">{order.itemsCount}</TableCell>
-                <TableCell className="text-right">{order.number}</TableCell>
-                <TableCell className="text-right">{order.person}</TableCell>
-                <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <OrdersTable />
+        <Errors errors={errors?.orders?._errors} />
       </div>
       <div>
         <div className="flex flex-col gap-5 mt-2">
@@ -180,42 +106,7 @@ export default function Dashboard() {
           </div>
           <div className="flex-1 flex flex-col gap-2">
             <Label>Contractor</Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" aria-expanded={open} className="flex-1 justify-between">
-                  {selectedContractor?.id ? selectedContractor.name : 'Select contractor...'}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0">
-                <Command>
-                  <CommandInput placeholder="Search contractor..." />
-                  <CommandEmpty>No contractor found.</CommandEmpty>
-                  <CommandGroup>
-                    <CommandList>
-                      {contractors?.map((contractor) => (
-                        <CommandItem
-                          key={contractor.id}
-                          value={contractor.id ?? ''}
-                          onSelect={() => {
-                            setOpen(false);
-                            setSelectedContractor(contractor);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              selectedContractor?.id === contractor.id ? 'opacity-100' : 'opacity-0'
-                            )}
-                          />
-                          {contractor.name}
-                        </CommandItem>
-                      ))}
-                    </CommandList>
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <ContractorPopover />
             <Errors errors={errors?.contractor?._errors} />
           </div>
           <Button className="md:mt-6" size="default" onClick={handleCreateInvoice}>

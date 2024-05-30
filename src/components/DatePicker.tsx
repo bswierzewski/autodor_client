@@ -41,6 +41,7 @@ export function DatePicker({ date, setDate, className, label }: Props) {
               setOpen(false);
               setDate(e);
             }}
+            required
             initialFocus
           />
         </PopoverContent>

@@ -23,6 +23,12 @@ dateFrom: string;
 dateTo: string;
 };
 
+export interface ResponseDto {
+  /** @nullable */
+  informacja?: string | null;
+  kod?: number;
+}
+
 export interface OrderItem {
   /** @nullable */
   partName?: string | null;
@@ -45,6 +51,10 @@ export interface OrderDto {
   /** @nullable */
   person?: string | null;
   readonly totalPrice?: number;
+}
+
+export interface InvoiceResponseDto {
+  response?: ResponseDto;
 }
 
 export interface DeleteContractorCommand {
@@ -265,7 +275,7 @@ export const createInvoice = (
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<void>(
+      return customInstance<InvoiceResponseDto>(
       {url: `/api/Invoices`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createInvoiceCommand
