@@ -57,9 +57,8 @@ export default function OrdersTable() {
           <span className="ml-3 inline md:hidden">Refresh</span>
         </Button>
       </div>
-      <Separator className="my-2 h-[2px]" />
       <Input
-        className="mb-2"
+        className="my-2"
         placeholder="Search by name"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
