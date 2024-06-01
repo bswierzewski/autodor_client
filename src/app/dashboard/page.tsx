@@ -2,7 +2,7 @@
 
 import { useContractorsStore } from '@/stores/contractor';
 import { useOrdersStore } from '@/stores/orders';
-import { BookPlus } from 'lucide-react';
+import { BookPlus, Loader2 } from 'lucide-react';
 import moment from 'moment';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -46,7 +46,7 @@ export default function Dashboard() {
   const orders = useOrdersStore((state) => state.orders);
   const selectedContractor = useContractorsStore((state) => state.selectedContractor);
 
-  const { mutate } = useCreateInvoice({
+  const { mutate, isPending } = useCreateInvoice({
     mutation: {
       onSuccess(data, variables, context) {
         if (data.response?.kod === 0) toast.success(data.response?.informacja ?? 'Empty response');
@@ -109,10 +109,17 @@ export default function Dashboard() {
             <ContractorPopover />
             <Errors errors={errors?.contractor?._errors} />
           </div>
-          <Button className="md:mt-6" size="default" onClick={handleCreateInvoice}>
-            <BookPlus />
-            <span className="ml-3">Add Invoice</span>
-          </Button>
+          {isPending ? (
+            <Button className="md:mt-6" disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
+          ) : (
+            <Button className="md:mt-6" size="default" onClick={handleCreateInvoice}>
+              <BookPlus />
+              <span className="ml-3">Add Invoice</span>
+            </Button>
+          )}
         </div>
       </div>
     </div>
