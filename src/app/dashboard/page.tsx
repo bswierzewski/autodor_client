@@ -17,6 +17,7 @@ import Errors from '@/components/Errors';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 const invoiceSchema = z.object({
   orders: z
@@ -79,14 +80,15 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-5">
+    <div className="flex flex-col xl:flex-row gap-5">
       <div className="flex-1">
         <OrdersTable />
         <Errors errors={errors?.orders?._errors} />
       </div>
-      <div>
+      <div className="xl:flex flex-row gap-5">
+        <Separator orientation="vertical" className="hidden xl:inline" />
         <div className="flex flex-col gap-5 mt-2">
-          <div className="flex-1">
+          <div className="flex-1 xl:flex-none">
             <Label>Invoice number</Label>
             <Input
               placeholder="Invoice number"
@@ -104,18 +106,18 @@ export default function Dashboard() {
             <DatePicker date={saleDate} setDate={setSaleDate} label="Sale date" />
             <Errors errors={errors?.saleDate?._errors} />
           </div>
-          <div className="flex-1 flex flex-col gap-2">
+          <div className="flex-1 xl:flex-none flex flex-col gap-2">
             <Label>Contractor</Label>
             <ContractorPopover />
             <Errors errors={errors?.contractor?._errors} />
           </div>
           {isPending ? (
-            <Button className="md:mt-6" disabled>
+            <Button className="xl:mt-6" disabled>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Please wait
             </Button>
           ) : (
-            <Button className="md:mt-6" size="default" onClick={handleCreateInvoice}>
+            <Button className="xl:mt-6" size="default" onClick={handleCreateInvoice}>
               <BookPlus />
               <span className="ml-3">Add Invoice</span>
             </Button>
