@@ -5,7 +5,8 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: 'MTParts',
   description: 'Invoice clients',
-  company: 'NinjaByte'
+  company: 'NinjaByte',
+  version: '1.0.0'
 };
 
 // Define button data
