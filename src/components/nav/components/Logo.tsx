@@ -23,7 +23,7 @@ export default function Logo({ className, size }: Props) {
       onClick={doReset}
       className={`${className} cursor-pointer flex items-center gap-2 text-3xl font-semibold mx-5`}
     >
-      <Image src={logo} height={size} width={size} alt="logo" />
+      <Image src={logo} height={size} width={size} priority alt="logo" />
     </div>
   );
 }
