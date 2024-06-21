@@ -25,7 +25,7 @@ export default function Sidebar({ className }: Props) {
   const session = useSession();
 
   return (
-    <div className={`${className} pt-5 p-2 shadow-2xl sticky top-0`}>
+    <div className={`${className} pt-5 p-2 shadow-2xl sticky top-0 max-h-screen`}>
       <div className="flex flex-col">
         <div className="flex flex-col flex-1 gap-2">
           <Logo size={150} />
