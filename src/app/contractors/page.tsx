@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Plus, RefreshCcw, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { getGetContractorsQueryKey, useDeleteContractor, useGetContractors } from '@/lib/api/mtparts';
 
@@ -21,6 +22,7 @@ export default function Contractors() {
   const { mutate } = useDeleteContractor({
     mutation: {
       onSuccess() {
+        toast.success('Successfully removed');
         queryClient.invalidateQueries({
           queryKey: getGetContractorsQueryKey()
         });
