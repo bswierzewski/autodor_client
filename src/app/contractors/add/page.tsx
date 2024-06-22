@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { useCreateContractor } from '@/lib/api/mtparts';
+import { useCreateContractor } from '@/lib/api/autodor';
 
 import FormButtons from '@/components/FormButtons';
 import { Input } from '@/components/ui/input';

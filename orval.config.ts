@@ -1,7 +1,7 @@
 module.exports = {
-  mtparts: {
+  autodor: {
     output: {
-      target: './src/lib/api/mtparts.ts',
+      target: './src/lib/api/autodor.ts',
       client: 'react-query',
       override: {
         mutator: {
@@ -10,6 +10,6 @@ module.exports = {
         }
       }
     },
-    input: './docs/mtparts.yaml'
+    input: './docs/autodor.yaml'
   }
 };

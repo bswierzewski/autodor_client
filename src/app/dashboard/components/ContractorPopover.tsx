@@ -3,7 +3,7 @@ import { useContractorsStore } from '@/stores/contractor';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 
-import { useGetContractors } from '@/lib/api/mtparts';
+import { useGetContractors } from '@/lib/api/autodor';
 
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';

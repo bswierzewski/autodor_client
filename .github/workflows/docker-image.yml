@@ -25,5 +25,5 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ninjabytetech/mtparts_client:latest
+          tags: ninjabytetech/autodor_client:latest
           push: true

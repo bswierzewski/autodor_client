@@ -3,7 +3,7 @@ import { ScrollText, Settings, UserSearch } from 'lucide-react';
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'MTParts',
+  name: 'AUTODOR',
   description: 'Invoice clients',
   company: 'NinjaByte',
   version: '1.0.0'

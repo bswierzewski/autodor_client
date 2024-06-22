@@ -8,7 +8,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
-import { useCreateInvoice } from '@/lib/api/mtparts';
+import { useCreateInvoice } from '@/lib/api/autodor';
 
 import ContractorPopover from './components/ContractorPopover';
 import OrdersTable from './components/OrdersTable';

@@ -3,7 +3,7 @@ import { RotateCw } from 'lucide-react';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
-import { useGetOrders } from '@/lib/api/mtparts';
+import { useGetOrders } from '@/lib/api/autodor';
 
 import { DatePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';

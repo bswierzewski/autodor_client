@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { OrderDto } from '@/lib/api/mtparts';
+import { OrderDto } from '@/lib/api/autodor';
 
 type OrderDtoExtended = OrderDto & {
   isSelected: boolean;

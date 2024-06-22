@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { Contractor } from '@/lib/api/mtparts';
+import { Contractor } from '@/lib/api/autodor';
 
 type State = {
   selectedContractor: Contractor | undefined;

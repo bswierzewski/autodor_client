@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { getGetContractorsQueryKey, useDeleteContractor, useGetContractors } from '@/lib/api/mtparts';
+import { getGetContractorsQueryKey, useDeleteContractor, useGetContractors } from '@/lib/api/autodor';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
