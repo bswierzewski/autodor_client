@@ -30,7 +30,6 @@ const invoiceSchema = z.object({
   contractor: z.object({
     id: z.string()
   }),
-  invoiceNumber: z.number().positive(),
   issueDate: z.string().min(1),
   saleDate: z.string().min(1)
 });
@@ -41,7 +40,7 @@ type InvoiceErrors = z.ZodFormattedError<InvoiceData>;
 export default function Dashboard() {
   const [issueDate, setIssueDate] = useState<Date | undefined>(new Date());
   const [saleDate, setSaleDate] = useState<Date | undefined>(new Date());
-  const [invoiceNumber, setInvoiceNumber] = useState<number>(0);
+  const [invoiceNumber, setInvoiceNumber] = useState<number | undefined>();
   const [errors, setErrors] = useState<InvoiceErrors>();
 
   const orders = useOrdersStore((state) => state.orders);
@@ -96,7 +95,6 @@ export default function Dashboard() {
               type="number"
               onChange={(e) => setInvoiceNumber(Number(e.target.value))}
             />
-            <Errors errors={errors?.invoiceNumber?._errors} />
           </div>
           <div>
             <DatePicker date={issueDate} setDate={setIssueDate} label="Issue date" />
