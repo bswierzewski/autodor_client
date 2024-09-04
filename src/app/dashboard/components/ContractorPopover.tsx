@@ -26,7 +26,12 @@ export default function ContractorPopover() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0">
-        <Command>
+        <Command
+          filter={(value, search) => {
+            if (value.toLowerCase().includes(search.toLowerCase())) return 1;
+            return 0;
+          }}
+        >
           <CommandInput placeholder="Search contractor..." />
           <CommandEmpty>No contractor found.</CommandEmpty>
           <CommandGroup>
@@ -34,7 +39,7 @@ export default function ContractorPopover() {
               {contractors?.map((contractor) => (
                 <CommandItem
                   key={contractor.id}
-                  value={contractor.id ?? ''}
+                  value={contractor.name ?? ''}
                   onSelect={() => {
                     setOpen(false);
                     setSelectedContractor(contractor);
