@@ -10,6 +10,6 @@ module.exports = {
         }
       }
     },
-    input: './docs/autodor.yaml'
+    input: 'http://localhost:7000/swagger/v1/swagger.json'
   }
 };

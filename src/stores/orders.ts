@@ -17,6 +17,7 @@ type Actions = {
   setOrders: (orders: OrderDto[] | undefined) => void;
   toggleOrder: (order: OrderDtoExtended) => void;
   toggleOrders: (isSelected: boolean) => void;
+  excludeOrder: (orderId: string) => void;
 };
 
 const initialState: State = {
@@ -63,6 +64,16 @@ export const useOrdersStore = create<State & Actions>((set, get) => ({
 
       return {
         orders
+      };
+    }),
+  excludeOrder: (orderId) =>
+    set((state) => {
+      const updatedOrders = state.orders.map((order) =>
+        order.id === orderId ? { ...order, isExcluded: !order.isExcluded } : order
+      );
+
+      return {
+        orders: updatedOrders
       };
     })
 }));

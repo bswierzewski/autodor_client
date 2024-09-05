@@ -1,15 +1,15 @@
 import { useOrdersStore } from '@/stores/orders';
-import { RotateCw } from 'lucide-react';
+import { BookmarkCheck, BookmarkX, RotateCw } from 'lucide-react';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { useGetOrders } from '@/lib/api/autodor';
+import { useExcludeOrder, useGetOrders } from '@/lib/api/autodor';
 
 import { DatePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export default function OrdersTable() {
@@ -25,6 +25,7 @@ export default function OrdersTable() {
   const setSearchTerm = useOrdersStore((state) => state.setSearchTerm);
   const orders = useOrdersStore((state) => state.orders);
   const setOrders = useOrdersStore((state) => state.setOrders);
+  const excludeOrder = useOrdersStore((state) => state.excludeOrder);
 
   const { data, refetch, isFetching } = useGetOrders(
     {
@@ -38,6 +39,18 @@ export default function OrdersTable() {
       }
     }
   );
+
+  const { mutate } = useExcludeOrder({
+    mutation: {
+      onSuccess(data, variables, context) {
+        excludeOrder(variables.data.orderId);
+        toast.success('Order exclusion status updated successfully.');
+      },
+      onError(error) {
+        toast.error('Failed to update order exclusion status.');
+      }
+    }
+  });
 
   useEffect(() => {
     setOrders(data);
@@ -80,6 +93,7 @@ export default function OrdersTable() {
             <TableHead className="text-right">Number</TableHead>
             <TableHead className="text-right">Person</TableHead>
             <TableHead className="text-right">Total price</TableHead>
+            <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -101,6 +115,9 @@ export default function OrdersTable() {
                 <TableCell className="text-right">{order.number}</TableCell>
                 <TableCell className="text-right">{order.person}</TableCell>
                 <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
+                <TableCell className="text-right" onClick={() => mutate({ data: { orderId: order.id ?? '' } })}>
+                  {order.isExcluded ? <BookmarkX /> : <BookmarkCheck className="opacity-10" />}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
