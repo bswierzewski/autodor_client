@@ -22,7 +22,7 @@ export default function Contractors() {
   const { mutate } = useDeleteContractor({
     mutation: {
       onSuccess() {
-        toast.success('Successfully removed');
+        toast.success('Poprawnie usunięty');
         queryClient.invalidateQueries({
           queryKey: getGetContractorsQueryKey()
         });
@@ -37,24 +37,24 @@ export default function Contractors() {
   return (
     <div>
       <div className="flex flex-col sm:flex-row gap-5">
-        <Input placeholder="Search by name" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        <Input placeholder="Wyszukaj po nazwie" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         <Button size="default" onClick={() => refetch()} variant="secondary">
           <RefreshCcw />
-          <span className="ml-3 inline sm:hidden">Refresh</span>
+          <span className="ml-3 inline sm:hidden">Odśwież</span>
         </Button>
         <Button size="default" onClick={() => router.push('/contractors/add')}>
           <Plus />
-          <span className="ml-3 inline sm:hidden">Add</span>
+          <span className="ml-3 inline sm:hidden">Dodaj</span>
         </Button>
       </div>
       <Separator className="my-4" />
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-right">Name</TableHead>
-            <TableHead className="text-right">City</TableHead>
-            <TableHead className="text-right">ZipCode</TableHead>
-            <TableHead className="text-right">Street</TableHead>
+            <TableHead className="text-right">Nazwa</TableHead>
+            <TableHead className="text-right">Miasto</TableHead>
+            <TableHead className="text-right">Kod pocztowy</TableHead>
+            <TableHead className="text-right">Ulica</TableHead>
             <TableHead className="text-right">Nip</TableHead>
             <TableHead className="text-right">Email</TableHead>
             <TableHead className="text-right"></TableHead>

@@ -1,8 +1,9 @@
 'use client';
 
+import { signIn, useSession } from 'next-auth/react';
+
 import Logo from '@/components/nav/components/Logo';
 import { Button } from '@/components/ui/button';
-import { signIn, useSession } from 'next-auth/react';
 
 export default function Guard({
   children
@@ -21,18 +22,18 @@ export default function Guard({
           <div className="text-center">
             {session.status === 'unauthenticated' ? (
               <>
-                <div className="text-2xl font-bold">You need to be logged in to do that</div>
-                <div className="mt-2">Please click below to sign in</div>
+                <div className="text-2xl font-bold">Musisz być zalogowany by korzystać z tej strony</div>
+                <div className="mt-2">Kliknij poniżej by się zalogować</div>
                 <div className="mt-4">
                   <Button variant={'outline'} onClick={() => signIn('auth0')}>
-                    Login
+                    Zaloguj
                   </Button>
                 </div>
               </>
             ) : (
               <>
-                <div className="text-2xl font-bold">Session initalize</div>
-                <div className="mt-2">Please wait ...</div>
+                <div className="text-2xl font-bold">Inicjalizacja sesji</div>
+                <div className="mt-2">Proszę czekać ...</div>
               </>
             )}
           </div>

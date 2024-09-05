@@ -13,14 +13,14 @@ export const siteConfig = {
 export const Urls = [
   {
     id: 1,
-    label: 'Dashboard',
+    label: 'Tablica',
     icon: <ScrollText />,
     iconSmall: <ScrollText className="h-4 w-4" />,
     route: '/dashboard'
   },
   {
     id: 2,
-    label: 'Contractors',
+    label: 'Kontrahenci',
     icon: <UserSearch />,
     iconSmall: <UserSearch className="h-4 w-4" />,
     route: '/contractors'

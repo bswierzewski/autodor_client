@@ -15,15 +15,15 @@ export default function FormButtons({ mode, isPending }: Props) {
   return (
     <div className="flex mt-5 gap-5">
       <Button className="flex-1" type="button" variant="outline" onClick={() => router.back()}>
-        Cancel
+        Anuluj
       </Button>
       {isPending ? (
         <Button disabled className="flex-1">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Please wait
+          Proszę czekać
         </Button>
       ) : (
-        <Button className="flex-1">{mode === 'create' ? 'Add' : 'Update'}</Button>
+        <Button className="flex-1">{mode === 'create' ? 'Dodaj' : 'Edytuj'}</Button>
       )}
     </div>
   );

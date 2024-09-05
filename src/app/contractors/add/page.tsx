@@ -53,28 +53,28 @@ export default function AddContractor() {
     >
       <div className="grid w-full items-center gap-4">
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" placeholder="Name" {...register('name')} />
+          <Label htmlFor="name">Nazwa</Label>
+          <Input id="name" placeholder="Nazwa" {...register('name')} />
         </div>
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="city">City</Label>
-          <Input id="city" placeholder="city" {...register('city')} />
+          <Label htmlFor="city">Miasto</Label>
+          <Input id="city" placeholder="Miasto" {...register('city')} />
         </div>
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="street">Street</Label>
-          <Input id="street" placeholder="street" {...register('street')} />
+          <Label htmlFor="street">Ulica</Label>
+          <Input id="street" placeholder="Ulica" {...register('street')} />
         </div>
         <div className="flex flex-col space-y-2">
           <Label htmlFor="nip">NIP</Label>
           <Input id="nip" placeholder="NIP" {...register('nip')} />
         </div>
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="zipCode">ZipCode</Label>
+          <Label htmlFor="zipCode">Kod pocztowy</Label>
           <Input id="zipCode" placeholder="00-000" {...register('zipCode')} />
         </div>
         <div className="flex flex-col space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" placeholder="email" {...register('email')} />
+          <Input id="email" placeholder="Email" {...register('email')} />
         </div>
       </div>
       <FormButtons isPending={isPending} mode="create" />

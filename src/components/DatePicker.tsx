@@ -3,6 +3,7 @@
 import { Label } from './ui/label';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { pl } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 
@@ -30,11 +31,12 @@ export function DatePicker({ date, setDate, className, label }: Props) {
             className={cn('w-[100%] justify-start text-left font-normal', !date && 'text-muted-foreground')}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, 'PPP') : <span>Pick a date</span>}
+            {date ? format(date, 'yyyy-MM-dd') : <span>Wybierz datę</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
+            locale={pl}
             mode="single"
             selected={date}
             onSelect={(e) => {

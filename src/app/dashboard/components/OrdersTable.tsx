@@ -40,14 +40,14 @@ export default function OrdersTable() {
     }
   );
 
-  const { mutate } = useExcludeOrder({
+  const { mutate, isPending } = useExcludeOrder({
     mutation: {
       onSuccess(data, variables, context) {
         excludeOrder(variables.data.orderId);
-        toast.success('Order exclusion status updated successfully.');
+        toast.success('Wykluczenie przebiegło pomyślnie');
       },
       onError(error) {
-        toast.error('Failed to update order exclusion status.');
+        toast.error('Wystąpił problem podczas wykluczania zamówienia');
       }
     }
   });
@@ -63,16 +63,16 @@ export default function OrdersTable() {
   return (
     <>
       <div className="flex flex-col md:flex-row gap-5">
-        <DatePicker date={dateFrom} setDate={setDateFrom} label="Date from" />
-        <DatePicker date={dateTo} setDate={setDateTo} label="Date to" />
+        <DatePicker date={dateFrom} setDate={setDateFrom} label="Data od" />
+        <DatePicker date={dateTo} setDate={setDateTo} label="Data do" />
         <Button className="md:mt-6" disabled={isFetching} size="default" onClick={() => refetch()}>
           <RotateCw className={isFetching ? 'animate-spin' : ''} />
-          <span className="ml-3 inline md:hidden">Refresh</span>
+          <span className="ml-3 inline md:hidden">Odśwież</span>
         </Button>
       </div>
       <Input
         className="my-2"
-        placeholder="Search by name"
+        placeholder="Wyszukaj po nazwie kontrahenta"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -87,12 +87,12 @@ export default function OrdersTable() {
                 checked={checked}
               />
             </TableHead>
-            <TableHead className="text-right">Id</TableHead>
-            <TableHead className="text-right">Date</TableHead>
-            <TableHead className="text-right">Items count</TableHead>
-            <TableHead className="text-right">Number</TableHead>
-            <TableHead className="text-right">Person</TableHead>
-            <TableHead className="text-right">Total price</TableHead>
+            <TableHead className="text-right">#</TableHead>
+            <TableHead className="text-right">Data</TableHead>
+            <TableHead className="text-right">Ilość pozycji</TableHead>
+            <TableHead className="text-right">Numer zamówienia</TableHead>
+            <TableHead className="text-right">Kontrahent</TableHead>
+            <TableHead className="text-right">Kwota całkowita</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -116,7 +116,11 @@ export default function OrdersTable() {
                 <TableCell className="text-right">{order.person}</TableCell>
                 <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
                 <TableCell className="text-right" onClick={() => mutate({ data: { orderId: order.id ?? '' } })}>
-                  {order.isExcluded ? <BookmarkX /> : <BookmarkCheck className="opacity-10" />}
+                  {order.isExcluded ? (
+                    <BookmarkX />
+                  ) : (
+                    <BookmarkCheck className={`opacity-10 ${isPending ? 'animate-pulse' : ''}`} />
+                  )}
                 </TableCell>
               </TableRow>
             ))}

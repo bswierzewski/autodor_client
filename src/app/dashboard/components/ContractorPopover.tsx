@@ -21,7 +21,7 @@ export default function ContractorPopover() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" aria-expanded={open} className="flex-1 justify-between">
-          {selectedContractor?.id ? selectedContractor.name : 'Select contractor...'}
+          {selectedContractor?.id ? selectedContractor.name : 'Wybierz kontrahenta...'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -32,8 +32,8 @@ export default function ContractorPopover() {
             return 0;
           }}
         >
-          <CommandInput placeholder="Search contractor..." />
-          <CommandEmpty>No contractor found.</CommandEmpty>
+          <CommandInput placeholder="Wyszukaj kontrahenta..." />
+          <CommandEmpty>Nie znaleziono kontrahenta.</CommandEmpty>
           <CommandGroup>
             <CommandList>
               {contractors?.map((contractor) => (

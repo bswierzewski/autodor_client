@@ -26,10 +26,15 @@ const invoiceSchema = z.object({
         id: z.string()
       })
     )
-    .min(1),
-  contractor: z.object({
-    id: z.string()
-  }),
+    .min(1, { message: 'Wymagane jest wybranie przynajmniej jednego zamówienia' }),
+  contractor: z.object(
+    {
+      id: z.string()
+    },
+    {
+      required_error: 'Kontrahent jest wymagany'
+    }
+  ),
   issueDate: z.string().min(1),
   saleDate: z.string().min(1)
 });
@@ -49,7 +54,7 @@ export default function Dashboard() {
   const { mutate, isPending } = useCreateInvoice({
     mutation: {
       onSuccess(data, variables, context) {
-        if (data.response?.kod === 0) toast.success(data.response?.informacja ?? 'Empty response');
+        if (data.response?.kod === 0) toast.success(data.response?.informacja ?? 'Pusta odpowiedź');
         else toast.error(`${data.response?.kod} - ${data.response?.informacja}`);
       }
     }
@@ -88,36 +93,36 @@ export default function Dashboard() {
         <Separator orientation="vertical" className="hidden xl:inline" />
         <div className="flex flex-col gap-5 mt-2">
           <div className="flex-1 xl:flex-none">
-            <Label>Invoice number</Label>
+            <Label>Numer faktury</Label>
             <Input
-              placeholder="Invoice number"
+              placeholder="Numer faktury"
               value={invoiceNumber}
               type="number"
               onChange={(e) => setInvoiceNumber(Number(e.target.value))}
             />
           </div>
           <div>
-            <DatePicker date={issueDate} setDate={setIssueDate} label="Issue date" />
+            <DatePicker date={issueDate} setDate={setIssueDate} label="Data faktury" />
             <Errors errors={errors?.issueDate?._errors} />
           </div>
           <div>
-            <DatePicker date={saleDate} setDate={setSaleDate} label="Sale date" />
+            <DatePicker date={saleDate} setDate={setSaleDate} label="Data sprzedaży" />
             <Errors errors={errors?.saleDate?._errors} />
           </div>
           <div className="flex-1 xl:flex-none flex flex-col gap-2">
-            <Label>Contractor</Label>
+            <Label>Kontrahent</Label>
             <ContractorPopover />
             <Errors errors={errors?.contractor?._errors} />
           </div>
           {isPending ? (
             <Button className="xl:mt-6" disabled>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
+              Proszę czekać
             </Button>
           ) : (
             <Button className="xl:mt-6" size="default" onClick={handleCreateInvoice}>
               <BookPlus />
-              <span className="ml-3">Add Invoice</span>
+              <span className="ml-3">Wystaw fakturę</span>
             </Button>
           )}
         </div>
