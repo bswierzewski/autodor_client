@@ -87,9 +87,10 @@ export default function OrdersTable() {
                 checked={checked}
               />
             </TableHead>
-            <TableHead className="text-right">Kontrahent</TableHead>
+            <TableHead className="text-right">NIP</TableHead>
             <TableHead className="text-right">Data</TableHead>
             <TableHead className="text-right">Ilość pozycji</TableHead>
+            <TableHead className="text-right">Kontrahent</TableHead>
             <TableHead className="text-right">Numer zamówienia</TableHead>
             <TableHead className="text-right">Kwota całkowita</TableHead>
             <TableHead className="text-right"></TableHead>
@@ -108,11 +109,10 @@ export default function OrdersTable() {
                     className="mb-[6px]"
                   />
                 </TableCell>
-                <TableCell className="text-right">
-                  {order.customerNumber} - {order.person}
-                </TableCell>
+                <TableCell className="text-right">{order.customerNumber}</TableCell>
                 <TableCell className="text-right">{moment(order.date).format('YYYY-MM-DD')}</TableCell>
                 <TableCell className="text-right">{order.itemsCount}</TableCell>
+                <TableCell className="text-right">{order.person}</TableCell>
                 <TableCell className="text-right">{order.number}</TableCell>
                 <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
                 <TableCell className="text-right" onClick={() => mutate({ data: { orderId: order.id ?? '' } })}>
