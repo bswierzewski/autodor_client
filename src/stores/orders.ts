@@ -33,7 +33,9 @@ export const useOrdersStore = create<State & Actions>((set, get) => ({
       searchTerm,
       orders: state.orders.map((order) => ({
         ...order,
-        isVisible: order.person?.toLowerCase().includes(searchTerm.toLowerCase()) ?? true
+        isVisible:
+          (order.person?.toLowerCase().includes(searchTerm.toLowerCase()) ?? true) ||
+          (order.customerNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ?? true)
       }))
     })),
 
