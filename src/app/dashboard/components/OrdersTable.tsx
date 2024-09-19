@@ -60,6 +60,13 @@ export default function OrdersTable() {
     toggleOrders(checked);
   }, [checked]);
 
+  // Sort orders by date in descending order before rendering
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = a.date ? new Date(a.date).getTime() : 0;
+    const dateB = b.date ? new Date(b.date).getTime() : 0;
+    return dateB - dateA; // Descending order
+  });
+
   return (
     <>
       <div className="flex flex-col md:flex-row gap-5">
@@ -97,7 +104,7 @@ export default function OrdersTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders
+          {sortedOrders
             .filter((order) => order.isVisible)
             .map((order) => (
               <TableRow key={order.id}>
