@@ -126,7 +126,7 @@ export default function OrdersTable() {
                 <TableCell className="text-right">{order.number}</TableCell>
                 <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
                 <TableCell className="text-right">
-                  <div className="flex flex-row gap-3">
+                  <div className="flex flex-row gap-5">
                     {order.isExcluded ? (
                       <BookmarkX
                         onClick={() => mutate({ data: { orderId: order.id ?? '' } })}
