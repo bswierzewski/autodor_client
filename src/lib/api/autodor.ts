@@ -4,8 +4,10 @@
  * Web
  * OpenAPI spec version: 1.0
  */
-import { customInstance } from './custom-instance';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query'
 import type {
   MutationFunction,
   QueryFunction,
@@ -14,17 +16,23 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult
-} from '@tanstack/react-query';
-
+} from '@tanstack/react-query'
+import { customInstance } from './custom-instance';
 export type GetOrdersParams = {
-  dateFrom: string;
-  dateTo: string;
+dateFrom: string;
+dateTo: string;
 };
 
 export interface ResponseDto {
   /** @nullable */
   informacja?: string | null;
   kod?: number;
+}
+
+export interface PrintInvoiceCommand {
+  date?: string;
+  /** @minLength 1 */
+  orderId: string;
 }
 
 export interface OrderItem {
@@ -112,338 +120,383 @@ export interface Contractor {
   zipCode?: string | null;
 }
 
+
+
+
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
-export const getContractors = (options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
-  return customInstance<Contractor[]>({ url: `/api/Contractors`, method: 'GET', signal }, options);
-};
+
+export const getContractors = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Contractor[]>(
+      {url: `/api/Contractors`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetContractorsQueryKey = () => {
-  return [`/api/Contractors`] as const;
-};
+    return [`/api/Contractors`] as const;
+    }
 
-export const getGetContractorsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getContractors>>,
-  TError = unknown
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getContractors>>, TError, TData>>;
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+    
+export const getGetContractorsQueryOptions = <TData = Awaited<ReturnType<typeof getContractors>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContractors>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetContractorsQueryKey();
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getContractors>>> = ({ signal }) =>
-    getContractors(requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetContractorsQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getContractors>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  
 
-export type GetContractorsQueryResult = NonNullable<Awaited<ReturnType<typeof getContractors>>>;
-export type GetContractorsQueryError = unknown;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getContractors>>> = ({ signal }) => getContractors(requestOptions, signal);
 
-export const useGetContractors = <TData = Awaited<ReturnType<typeof getContractors>>, TError = unknown>(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getContractors>>, TError, TData>>;
-  request?: SecondParameter<typeof customInstance>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetContractorsQueryOptions(options);
+      
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+      
 
-  query.queryKey = queryOptions.queryKey;
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getContractors>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetContractorsQueryResult = NonNullable<Awaited<ReturnType<typeof getContractors>>>
+export type GetContractorsQueryError = unknown
+
+export const useGetContractors = <TData = Awaited<ReturnType<typeof getContractors>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContractors>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetContractorsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
-};
+}
+
+
+
 
 export const createContractor = (
-  createContractorCommand: CreateContractorCommand,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<void>(
-    {
-      url: `/api/Contractors`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    createContractorCommand: CreateContractorCommand,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Contractors`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
       data: createContractorCommand
     },
-    options
-  );
-};
+      options);
+    }
+  
 
-export const getCreateContractorMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createContractor>>,
-    TError,
-    { data: CreateContractorCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createContractor>>,
-  TError,
-  { data: CreateContractorCommand },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createContractor>>,
-    { data: CreateContractorCommand }
-  > = (props) => {
-    const { data } = props ?? {};
+export const getCreateContractorMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createContractor>>, TError,{data: CreateContractorCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createContractor>>, TError,{data: CreateContractorCommand}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
-    return createContractor(data, requestOptions);
-  };
+      
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type CreateContractorMutationResult = NonNullable<Awaited<ReturnType<typeof createContractor>>>;
-export type CreateContractorMutationBody = CreateContractorCommand;
-export type CreateContractorMutationError = unknown;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createContractor>>, {data: CreateContractorCommand}> = (props) => {
+          const {data} = props ?? {};
 
-export const useCreateContractor = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createContractor>>,
-    TError,
-    { data: CreateContractorCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof createContractor>>,
-  TError,
-  { data: CreateContractorCommand },
-  TContext
-> => {
-  const mutationOptions = getCreateContractorMutationOptions(options);
+          return  createContractor(data,requestOptions)
+        }
 
-  return useMutation(mutationOptions);
-};
+        
 
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateContractorMutationResult = NonNullable<Awaited<ReturnType<typeof createContractor>>>
+    export type CreateContractorMutationBody = CreateContractorCommand
+    export type CreateContractorMutationError = unknown
+
+    export const useCreateContractor = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createContractor>>, TError,{data: CreateContractorCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createContractor>>,
+        TError,
+        {data: CreateContractorCommand},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateContractorMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const deleteContractor = (
-  deleteContractorCommand: DeleteContractorCommand,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<void>(
-    {
-      url: `/api/Contractors`,
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+    deleteContractorCommand: DeleteContractorCommand,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Contractors`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
       data: deleteContractorCommand
     },
-    options
-  );
-};
+      options);
+    }
+  
 
-export const getDeleteContractorMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteContractor>>,
-    TError,
-    { data: DeleteContractorCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteContractor>>,
-  TError,
-  { data: DeleteContractorCommand },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteContractor>>,
-    { data: DeleteContractorCommand }
-  > = (props) => {
-    const { data } = props ?? {};
+export const getDeleteContractorMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{data: DeleteContractorCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{data: DeleteContractorCommand}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
-    return deleteContractor(data, requestOptions);
-  };
+      
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type DeleteContractorMutationResult = NonNullable<Awaited<ReturnType<typeof deleteContractor>>>;
-export type DeleteContractorMutationBody = DeleteContractorCommand;
-export type DeleteContractorMutationError = unknown;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteContractor>>, {data: DeleteContractorCommand}> = (props) => {
+          const {data} = props ?? {};
 
-export const useDeleteContractor = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteContractor>>,
-    TError,
-    { data: DeleteContractorCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof deleteContractor>>,
-  TError,
-  { data: DeleteContractorCommand },
-  TContext
-> => {
-  const mutationOptions = getDeleteContractorMutationOptions(options);
+          return  deleteContractor(data,requestOptions)
+        }
 
-  return useMutation(mutationOptions);
-};
+        
 
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteContractorMutationResult = NonNullable<Awaited<ReturnType<typeof deleteContractor>>>
+    export type DeleteContractorMutationBody = DeleteContractorCommand
+    export type DeleteContractorMutationError = unknown
+
+    export const useDeleteContractor = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteContractor>>, TError,{data: DeleteContractorCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteContractor>>,
+        TError,
+        {data: DeleteContractorCommand},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteContractorMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const printInvoice = (
+    printInvoiceCommand: PrintInvoiceCommand,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<Blob>(
+      {url: `/api/Invoices/PrintInvoice`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: printInvoiceCommand,
+        responseType: 'blob'
+    },
+      options);
+    }
+  
+
+
+export const getPrintInvoiceMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof printInvoice>>, TError,{data: PrintInvoiceCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof printInvoice>>, TError,{data: PrintInvoiceCommand}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof printInvoice>>, {data: PrintInvoiceCommand}> = (props) => {
+          const {data} = props ?? {};
+
+          return  printInvoice(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PrintInvoiceMutationResult = NonNullable<Awaited<ReturnType<typeof printInvoice>>>
+    export type PrintInvoiceMutationBody = PrintInvoiceCommand
+    export type PrintInvoiceMutationError = unknown
+
+    export const usePrintInvoice = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof printInvoice>>, TError,{data: PrintInvoiceCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof printInvoice>>,
+        TError,
+        {data: PrintInvoiceCommand},
+        TContext
+      > => {
+
+      const mutationOptions = getPrintInvoiceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const createInvoice = (
-  createInvoiceCommand: CreateInvoiceCommand,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<InvoiceResponseDto>(
-    {
-      url: `/api/Invoices`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    createInvoiceCommand: CreateInvoiceCommand,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<InvoiceResponseDto>(
+      {url: `/api/Invoices`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
       data: createInvoiceCommand
     },
-    options
-  );
-};
+      options);
+    }
+  
 
-export const getCreateInvoiceMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createInvoice>>,
-    TError,
-    { data: CreateInvoiceCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<Awaited<ReturnType<typeof createInvoice>>, TError, { data: CreateInvoiceCommand }, TContext> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof createInvoice>>, { data: CreateInvoiceCommand }> = (
-    props
-  ) => {
-    const { data } = props ?? {};
+export const getCreateInvoiceMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createInvoice>>, TError,{data: CreateInvoiceCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createInvoice>>, TError,{data: CreateInvoiceCommand}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
-    return createInvoice(data, requestOptions);
-  };
+      
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type CreateInvoiceMutationResult = NonNullable<Awaited<ReturnType<typeof createInvoice>>>;
-export type CreateInvoiceMutationBody = CreateInvoiceCommand;
-export type CreateInvoiceMutationError = unknown;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createInvoice>>, {data: CreateInvoiceCommand}> = (props) => {
+          const {data} = props ?? {};
 
-export const useCreateInvoice = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createInvoice>>,
-    TError,
-    { data: CreateInvoiceCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationResult<Awaited<ReturnType<typeof createInvoice>>, TError, { data: CreateInvoiceCommand }, TContext> => {
-  const mutationOptions = getCreateInvoiceMutationOptions(options);
+          return  createInvoice(data,requestOptions)
+        }
 
-  return useMutation(mutationOptions);
-};
+        
 
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateInvoiceMutationResult = NonNullable<Awaited<ReturnType<typeof createInvoice>>>
+    export type CreateInvoiceMutationBody = CreateInvoiceCommand
+    export type CreateInvoiceMutationError = unknown
+
+    export const useCreateInvoice = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createInvoice>>, TError,{data: CreateInvoiceCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createInvoice>>,
+        TError,
+        {data: CreateInvoiceCommand},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateInvoiceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const getOrders = (
-  params: GetOrdersParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params: GetOrdersParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<OrderDto[]>({ url: `/api/Orders`, method: 'GET', params, signal }, options);
-};
+      
+      
+      return customInstance<OrderDto[]>(
+      {url: `/api/Orders`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetOrdersQueryKey = (params: GetOrdersParams) => {
-  return [`/api/Orders`, ...(params ? [params] : [])] as const;
-};
+export const getGetOrdersQueryKey = (params: GetOrdersParams,) => {
+    return [`/api/Orders`, ...(params ? [params]: [])] as const;
+    }
 
-export const getGetOrdersQueryOptions = <TData = Awaited<ReturnType<typeof getOrders>>, TError = unknown>(
-  params: GetOrdersParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+    
+export const getGetOrdersQueryOptions = <TData = Awaited<ReturnType<typeof getOrders>>, TError = unknown>(params: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrdersQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrders>>> = ({ signal }) =>
-    getOrders(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrdersQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrders>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
+  
 
-export type GetOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrders>>>;
-export type GetOrdersQueryError = unknown;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrders>>> = ({ signal }) => getOrders(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrders>>>
+export type GetOrdersQueryError = unknown
 
 export const useGetOrders = <TData = Awaited<ReturnType<typeof getOrders>>, TError = unknown>(
-  params: GetOrdersParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetOrdersQueryOptions(params, options);
+ params: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  query.queryKey = queryOptions.queryKey;
+  const queryOptions = getGetOrdersQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
-};
+}
+
+
+
 
 export const excludeOrder = (
-  excludeOrderCommand: ExcludeOrderCommand,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<void>(
-    { url: `/api/Orders`, method: 'POST', headers: { 'Content-Type': 'application/json' }, data: excludeOrderCommand },
-    options
-  );
-};
+    excludeOrderCommand: ExcludeOrderCommand,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/Orders`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: excludeOrderCommand
+    },
+      options);
+    }
+  
 
-export const getExcludeOrderMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof excludeOrder>>,
-    TError,
-    { data: ExcludeOrderCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<Awaited<ReturnType<typeof excludeOrder>>, TError, { data: ExcludeOrderCommand }, TContext> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof excludeOrder>>, { data: ExcludeOrderCommand }> = (
-    props
-  ) => {
-    const { data } = props ?? {};
+export const getExcludeOrderMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof excludeOrder>>, TError,{data: ExcludeOrderCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof excludeOrder>>, TError,{data: ExcludeOrderCommand}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
-    return excludeOrder(data, requestOptions);
-  };
+      
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type ExcludeOrderMutationResult = NonNullable<Awaited<ReturnType<typeof excludeOrder>>>;
-export type ExcludeOrderMutationBody = ExcludeOrderCommand;
-export type ExcludeOrderMutationError = unknown;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof excludeOrder>>, {data: ExcludeOrderCommand}> = (props) => {
+          const {data} = props ?? {};
 
-export const useExcludeOrder = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof excludeOrder>>,
-    TError,
-    { data: ExcludeOrderCommand },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationResult<Awaited<ReturnType<typeof excludeOrder>>, TError, { data: ExcludeOrderCommand }, TContext> => {
-  const mutationOptions = getExcludeOrderMutationOptions(options);
+          return  excludeOrder(data,requestOptions)
+        }
 
-  return useMutation(mutationOptions);
-};
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExcludeOrderMutationResult = NonNullable<Awaited<ReturnType<typeof excludeOrder>>>
+    export type ExcludeOrderMutationBody = ExcludeOrderCommand
+    export type ExcludeOrderMutationError = unknown
+
+    export const useExcludeOrder = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof excludeOrder>>, TError,{data: ExcludeOrderCommand}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof excludeOrder>>,
+        TError,
+        {data: ExcludeOrderCommand},
+        TContext
+      > => {
+
+      const mutationOptions = getExcludeOrderMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    

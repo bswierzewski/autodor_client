@@ -1,10 +1,11 @@
+import { handleDownload } from '@/lib/utils';
 import { useOrdersStore } from '@/stores/orders';
-import { BookmarkCheck, BookmarkX, RotateCw } from 'lucide-react';
+import { BookmarkCheck, BookmarkX, Printer, RotateCw } from 'lucide-react';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { useExcludeOrder, useGetOrders } from '@/lib/api/autodor';
+import { useExcludeOrder, useGetOrders, usePrintInvoice } from '@/lib/api/autodor';
 
 import { DatePicker } from '@/components/DatePicker';
 import { Button } from '@/components/ui/button';
@@ -51,6 +52,8 @@ export default function OrdersTable() {
       }
     }
   });
+
+  const { mutate: mutatePrint } = usePrintInvoice();
 
   useEffect(() => {
     setOrders(data);
@@ -122,12 +125,39 @@ export default function OrdersTable() {
                 <TableCell className="text-right">{order.person}</TableCell>
                 <TableCell className="text-right">{order.number}</TableCell>
                 <TableCell className="text-right">{order.totalPrice?.toFixed(2)} zł</TableCell>
-                <TableCell className="text-right" onClick={() => mutate({ data: { orderId: order.id ?? '' } })}>
-                  {order.isExcluded ? (
-                    <BookmarkX />
-                  ) : (
-                    <BookmarkCheck className={`opacity-10 ${isPending ? 'animate-pulse' : ''}`} />
-                  )}
+                <TableCell className="text-right">
+                  <div className="flex flex-row gap-3">
+                    {order.isExcluded ? (
+                      <BookmarkX
+                        onClick={() => mutate({ data: { orderId: order.id ?? '' } })}
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <BookmarkCheck
+                        onClick={() => mutate({ data: { orderId: order.id ?? '' } })}
+                        className={`cursor-pointer opacity-10 ${isPending ? 'animate-pulse' : ''}`}
+                      />
+                    )}
+
+                    <Printer
+                      onClick={() => {
+                        mutatePrint(
+                          {
+                            data: {
+                              orderId: order.id ?? '',
+                              date: order.date
+                            }
+                          },
+                          {
+                            onSuccess(data, variables, context) {
+                              handleDownload(data, order.number);
+                            }
+                          }
+                        );
+                      }}
+                      className={`cursor-pointer`}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
