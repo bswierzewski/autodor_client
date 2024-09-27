@@ -19,6 +19,7 @@ export default function OrdersTable() {
   const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date(Date.now() - daysInSecond));
   const [dateTo, setDateTo] = useState<Date | undefined>(new Date());
   const [checked, setChecked] = useState<boolean>(false);
+  const [clickedPrinterIds, setClickedPrinterIds] = useState<string[]>([]);
 
   const toggleOrder = useOrdersStore((state) => state.toggleOrder);
   const toggleOrders = useOrdersStore((state) => state.toggleOrders);
@@ -41,7 +42,7 @@ export default function OrdersTable() {
     }
   );
 
-  const { mutate, isPending } = useExcludeOrder({
+  const { mutate } = useExcludeOrder({
     mutation: {
       onSuccess(data, variables, context) {
         excludeOrder(variables.data.orderId);
@@ -135,12 +136,13 @@ export default function OrdersTable() {
                     ) : (
                       <BookmarkCheck
                         onClick={() => mutate({ data: { orderId: order.id ?? '' } })}
-                        className={`cursor-pointer opacity-10 ${isPending ? 'animate-pulse' : ''}`}
+                        className={`cursor-pointer opacity-10`}
                       />
                     )}
 
                     <Printer
                       onClick={() => {
+                        setClickedPrinterIds((prev) => [...prev, order.id ?? '']);
                         mutatePrint(
                           {
                             data: {
@@ -151,11 +153,14 @@ export default function OrdersTable() {
                           {
                             onSuccess(data, variables, context) {
                               handleDownload(data, order.number);
+                            },
+                            onSettled() {
+                              setClickedPrinterIds((prev) => prev.filter((id) => id !== order.id));
                             }
                           }
                         );
                       }}
-                      className={`cursor-pointer`}
+                      className={`cursor-pointer ${clickedPrinterIds.includes(order.id ?? '') ? 'animate-pulse' : ''}`}
                     />
                   </div>
                 </TableCell>
